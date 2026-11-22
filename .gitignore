@@ -1,0 +1,9 @@
+.venv/
+.build/
+__pycache__/
+*.py[cod]
+outputs/feedback_model/
+outputs/shineup_final/
+data/*.xlsx
+data/*.csv
+
