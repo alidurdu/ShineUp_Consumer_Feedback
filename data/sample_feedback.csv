@@ -1,0 +1,25 @@
+record_id,text,rating,product_type,label
+S001,"Light texture and pleasant scent; I would buy it again.",5,moisturizer,normal
+S002,"The packaging is attractive and the cream feels smooth.",4,moisturizer,normal
+S003,"Works well under makeup and absorbs quickly.",5,moisturizer,normal
+S004,"A nice everyday cleanser with a fresh feel.",4,cleanser,normal
+S005,"Good value and the fragrance is subtle.",4,serum,normal
+S006,"I like the lightweight formula.",5,serum,normal
+S007,"The bottle is hard to open and product leaks from the cap.",2,serum,product_issue
+S008,"The pump stopped working after a few days.",2,moisturizer,product_issue
+S009,"The cream feels greasy and takes too long to absorb.",2,moisturizer,product_issue
+S010,"The cleanser did not remove my makeup well.",2,cleanser,product_issue
+S011,"The scent is much stronger than expected.",3,cleanser,product_issue
+S012,"The product arrived damaged and the seal was broken.",1,serum,product_issue
+S013,"My skin felt itchy after applying the cream.",2,moisturizer,possible_sensitivity
+S014,"I noticed redness where I used the serum.",2,serum,possible_sensitivity
+S015,"The cleanser made my face feel irritated and tight.",1,cleanser,possible_sensitivity
+S016,"I had a burning feeling after using this lotion.",1,moisturizer,possible_sensitivity
+S017,"My cheeks became red after trying the new product.",2,serum,possible_sensitivity
+S018,"The area where I applied it felt uncomfortable.",2,moisturizer,possible_sensitivity
+S019,"I am not sure if this rash is related to the cream.",2,moisturizer,human_review
+S020,"My face feels strange and looks different since I tried it.",2,serum,human_review
+S021,"Please contact me about a reaction I experienced.",1,cleanser,human_review
+S022,"I need someone to review a problem after using this product.",2,serum,human_review
+S023,"There was a swelling feeling, but I cannot tell what caused it.",1,moisturizer,human_review
+S024,"Something happened after use and I would like help.",2,cleanser,human_review
