@@ -2,6 +2,10 @@
 
 This project includes an English-language Streamlit app, an English translation of the review workbook, and a four-class text-classification prototype. The app summarizes the original review records, shows class and rating charts, highlights records for human review, and lets a user try a text prediction.
 
+## Live app
+
+Open the deployed application: [Shineup Consumer Health Analytics](https://shineup-consumer-health-analytics.streamlit.app/).
+
 ## Data workbook
 
 The translated workbook is `data/Shineup_Trendyol_250_Reviews_Balanced_EN.xlsx`.
