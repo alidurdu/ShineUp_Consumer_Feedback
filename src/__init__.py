@@ -1,0 +1,1 @@
+"""Shineup analytics source package."""
