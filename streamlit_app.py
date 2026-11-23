@@ -85,6 +85,35 @@ def train_and_score(texts, labels):
     return final_model, metrics
 
 
+def rank_products(original, product_col, rating_col, label_col, minimum_reviews=10):
+    """Rank products using original review ratings and the existing review labels."""
+    if product_col not in original.columns or rating_col not in original.columns:
+        return pd.DataFrame()
+
+    reviews = original[[product_col, rating_col, label_col]].copy()
+    reviews[product_col] = reviews[product_col].fillna("").astype(str).str.strip()
+    reviews["_rating"] = pd.to_numeric(reviews[rating_col], errors="coerce")
+    reviews = reviews[(reviews[product_col] != "") & reviews["_rating"].notna()]
+    if reviews.empty:
+        return pd.DataFrame()
+
+    ranked = reviews.groupby(product_col).agg(
+        review_count=("_rating", "size"),
+        average_rating=("_rating", "mean"),
+        normal_count=(label_col, lambda values: (values == "normal").sum()),
+        product_issue_count=(label_col, lambda values: (values == "product_issue").sum()),
+        review_priority_count=(label_col, lambda values: values.isin(REVIEW_LABELS).sum()),
+    )
+    ranked["normal_share"] = ranked["normal_count"] / ranked["review_count"]
+    ranked["review_score"] = 100 * (
+        0.70 * ranked["average_rating"] / 5 + 0.30 * ranked["normal_share"]
+    )
+    ranked = ranked[ranked["review_count"] >= minimum_reviews]
+    return ranked.sort_values(
+        ["review_score", "review_count", "average_rating"], ascending=False
+    ).reset_index(names="product")
+
+
 def show_pie(frame, name_col, value_col, title):
     chart = px.pie(
         frame,
@@ -191,8 +220,62 @@ with overview_tab:
             show_pie(rating_frame, "Rating", "Records", "Rating distribution")
 
     if product_col in original.columns:
+        st.subheader("Top 3 products by review score")
+        ranked_products = rank_products(original, product_col, rating_col, label_col)
+        if ranked_products.empty:
+            st.info("There are not enough rated product reviews to create a ranking.")
+        else:
+            top_products = ranked_products.head(3).copy()
+            top_products = top_products.rename(
+                columns={
+                    "product": "Product",
+                    "review_count": "Reviews",
+                    "average_rating": "Average rating / 5",
+                    "normal_share": "Normal-label share",
+                    "product_issue_count": "Product-issue reviews",
+                    "review_priority_count": "Human-review flags",
+                    "review_score": "Review score / 100",
+                }
+            )
+            top_products.insert(0, "Rank", range(1, len(top_products) + 1))
+            score_chart = px.bar(
+                top_products,
+                x="Review score / 100",
+                y="Product",
+                orientation="h",
+                text="Review score / 100",
+                color="Review score / 100",
+                color_continuous_scale=["#dce9df", "#4b8f70"],
+                range_x=[0, 100],
+            )
+            score_chart.update_traces(texttemplate="%{text:.1f}", textposition="outside", cliponaxis=False)
+            score_chart.update_layout(
+                coloraxis_showscale=False,
+                xaxis_title="Composite review score (0–100)",
+                yaxis_title="",
+                yaxis={"categoryorder": "total ascending"},
+                margin=dict(t=12, b=16, l=12, r=60),
+                height=260,
+            )
+            st.plotly_chart(score_chart, width="stretch")
+            st.dataframe(
+                top_products[
+                    ["Rank", "Product", "Reviews", "Average rating / 5", "Normal-label share", "Product-issue reviews", "Human-review flags"]
+                ].style.format(
+                    {"Average rating / 5": "{:.2f}", "Normal-label share": "{:.1%}"}
+                ),
+                hide_index=True,
+                width="stretch",
+            )
+            st.caption(
+                "Score = 70% average rating (normalized to 5) + 30% share labeled Normal. "
+                "Only products with at least 10 rated original reviews are ranked. This is an exploratory "
+                "sample-based shortlist, not a product-quality or safety determination. "
+                "Human-review flags include possible-sensitivity and uncertain records."
+            )
+
         products = original[product_col].fillna("Not specified").value_counts().head(8)
-        st.subheader("Products with the most reviews")
+        st.subheader("Most reviewed products")
         st.bar_chart(products)
 
 with model_tab:
