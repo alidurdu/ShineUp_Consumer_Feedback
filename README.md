@@ -18,7 +18,12 @@ The rephrased examples are not independent customer observations. Model scores a
 
 ## Report
 
-Open the deployed application: `reports/Shineup_Consumer_Feedback_Project_Report_EN.pdf`.
+Open the report: `reports/Shineup_Consumer_Feedback_Project_Report_EN.pdf`.
+
+## Presentation
+
+Open the presentation: `reports/Shineup_Consumer_Feedback_Project_Presentation_EN.pptx`.
+ 
 
 ## Run locally
 
