@@ -16,6 +16,10 @@ The translated workbook is `data/Shineup_Trendyol_250_Reviews_Balanced_EN.xlsx`.
 
 The rephrased examples are not independent customer observations. Model scores are exploratory and do not establish performance on new customer reviews. There is no separate validation set. Possible-sensitivity labels are review categories, not confirmed medical events or diagnoses. The app does not provide medical advice.
 
+## Report
+
+Open the deployed application: `reports/Shineup_Consumer_Feedback_Project_Report_EN.pdf`.
+
 ## Run locally
 
 Use Python 3.10 or later:
